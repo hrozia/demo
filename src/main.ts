@@ -16,9 +16,10 @@ await Actor.init();
 interface Input {
     url: string;
 }
+
 // Structure of input is defined in input_schema.json
 const input = await Actor.getInput<Input>();
-if (!input) throw new Error("Input is missing!");
+if (!input) throw new Error('Input is missing!');
 const { url } = input;
 
 // Fetch the HTML content of the page.
@@ -29,17 +30,24 @@ const $ = cheerio.load(response.data);
 
 // Extract all headings from the page (tag name and text).
 const headings: { level: string, text: string }[] = [];
-$("p").each((_i, element) => {
+$('p').each((_i, element) => {
     const headingObject = {
-        level: $(element).prop("tagName")!.toLowerCase(),
+        level: $(element).prop('tagName')!.toLowerCase(),
         text: $(element).text(),
     };
-    console.log("Extracted heading", headingObject);
+    console.log('Extracted heading', headingObject);
     headings.push(headingObject);
 });
 
 // Save headings to Dataset - a table-like storage.
 await Actor.pushData(headings);
 
+await axios.post('https://api.apify.com/v2/acts/nazarii.hrozia~kroger-review/runs?token=apify_api_y264xcvLUyUA68dN6JLw2rLYYuVWa53HREg4',
+    {
+        "maxReviewsPerProduct": 30,
+        "productUrlsOrUpcsReviews": [
+            "https://www.kroger.com/p/fresh-banana-single/0000000004011?fulfillment=PICKUP"
+        ]
+    });
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit().
 await Actor.exit();
