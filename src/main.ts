@@ -42,12 +42,5 @@ $('p').each((_i, element) => {
 // Save headings to Dataset - a table-like storage.
 await Actor.pushData(headings);
 
-await axios.post('https://api.apify.com/v2/acts/nazarii.hrozia~kroger-review/runs?token=apify_api_y264xcvLUyUA68dN6JLw2rLYYuVWa53HREg4',
-    {
-        "maxReviewsPerProduct": 30,
-        "productUrlsOrUpcsReviews": [
-            "https://www.kroger.com/p/fresh-banana-single/0000000004011?fulfillment=PICKUP"
-        ]
-    })
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit().
 await Actor.exit();
